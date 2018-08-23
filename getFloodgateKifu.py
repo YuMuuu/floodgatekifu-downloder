@@ -1,8 +1,4 @@
-
 # coding: utf-8
-
-# In[22]:
-
 import datetime
 import pandas as pd
 import urllib.request
