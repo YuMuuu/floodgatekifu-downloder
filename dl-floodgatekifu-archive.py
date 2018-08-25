@@ -13,17 +13,17 @@ CONNECTION_RETRY = 10
 url1 = 'https://floodgate.shogidb2.com/archives/'
 url2 = '.zip'
 
+first_day = datetime.date(2015, 11, 1) #アーカイブされている最初の日時
 
 def set_date():
-    today = datetime.date.today()
-    first_day = datetime.date(2015, 11, 1)
+    today = datetime.date.today() #今日の日時を取得
 
     global date_list
-    date_list = pd.date_range(first_day, today - datetime.timedelta(days=1)).strftime('%Y%m%d')
+    date_list = pd.date_range(first_day, today - datetime.timedelta(days=1)).strftime('%Y%m%d') #first_dayからtodayまでの日数
     print('{0}日分の棋譜をダウンロードします'.format(date_list.size))
 
 
-def creat_link():
+def creat_link(): #ダウンロード元のurlを生成
     print('ダウンロード先: ' + os.path.abspath("."))
     for date in date_list:
         file_url = url1 + date + url2
@@ -32,11 +32,11 @@ def creat_link():
         title = date + url2
         download(url, title)
         print('ダウンロード中')
-        sleep(1)
+        sleep(1) #公式の人に言われたdelayを指定
     print('全てのファイルのダウンロードが完了しました')
 
 
-def download(url, title):
+def download(url, title): #ダウンロード
     for i in range(1, CONNECTION_RETRY + 1):
         try:
             urllib.request.urlretrieve(url, "{0}".format(title))
@@ -49,7 +49,7 @@ def download(url, title):
     return False
 
 
-def make_dir():
+def make_dir(): #zipの展開先のdirを作成
     dir_name = 'floodgate_kifu'
     if os.path.isdir(dir_name):
         print(dir_name + 'が既に存在します。当該ファイル上に展開します')
@@ -58,7 +58,7 @@ def make_dir():
         os.makedirs(dir_name)
 
 
-def open_zip():
+def open_zip(): #zipファイルを展開
     print('zipファイルを展開します')
     for date in date_list:
         title = date + url2
@@ -70,7 +70,7 @@ def open_zip():
     print('展開が完了しました')
 
 
-def rm_zip():
+def rm_zip(): #zipファイルを削除
     print('zipファイルを削除します')
     for date in date_list:
         title = date + url2
